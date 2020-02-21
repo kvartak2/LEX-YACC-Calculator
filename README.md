@@ -25,6 +25,10 @@ Tokens may be separated by any number of white spaces, tabs, or new lines.
 
 
 To compile:
+- make
+
+  OR
+  
 - flex calc.l;
 - bison -dv calc.y;
 - gcc -o calc calc.tab.c lex.yy.c
