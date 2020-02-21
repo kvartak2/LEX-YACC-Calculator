@@ -11,17 +11,19 @@
 %token TOK_ADD TOK_SUB TOK_MUL TOK_DIV
 %token TOK_SELFADD TOK_SELFSUB TOK_SELFMUL TOK_SELFDIV
 %token TOK_PRINTLN TOK_SEMICOLON TOK_BRACK_E TOK_BRACK_S TOK_CURLY_BRACK_S TOK_CURLY_BRACK_E
-%token TOK_ASSIGN
+%token TOK_ASSIGN TOK_MAIN
 
 %left TOK_ADD TOK_SUB
 %left TOK_MUL TOK_DIV
 %left TOK_SELFADD TOK_SELFSUB TOK_SELFMUL TOK_SELFDIV
 %left TOK_PRINTLN
 %left TOK_BRACK_E TOK_BRACK_S TOK_CURLY_BRACK_S TOK_CURLY_BRACK_E
-%left TOK_ASSIGN
+%left TOK_ASSIGN TOK_MAIN
 
 %%
-Prog    :   TOK_CURLY_BRACK_S stmts TOK_CURLY_BRACK_E '\n'
+Prog    :   TOK_MAIN TOK_CURLY_BRACK_S stmts TOK_CURLY_BRACK_E '\n'
+
+        |   TOK_MAIN TOK_CURLY_BRACK_S '\n' stmts TOK_CURLY_BRACK_E '\n'
 
 ;
 stmts   :
@@ -29,20 +31,21 @@ stmts   :
 
 ;
 
-stmt    :
-            TOK_CHAR TOK_ASSIGN E             { sym[$1] = $3; }
+stmt    :    E
+
+        |    TOK_CHAR TOK_ASSIGN E             { sym[$1] = $3; }
 
         |   TOK_CHAR TOK_SELFADD E     { $$ = sym[$1] = (sym[$1] + $3);}
         |   TOK_CHAR TOK_SELFSUB E     { $$ = sym[$1] = (sym[$1] - $3);}
         |   TOK_CHAR TOK_SELFMUL E     { $$ = sym[$1] = (sym[$1] * $3);}
         |   TOK_CHAR TOK_SELFDIV E     { $$ = sym[$1] = (sym[$1] / $3);}
 
-        |   TOK_PRINTLN E     { fprintf(stdout, "the value is %d\n", $2);}
+        |   TOK_PRINTLN E     { fprintf(stdout,"%d\n", $2);}
 ;
 
-E       :   Integer
+E       :
 
-        |   TOK_CHAR            { $$ = sym[$1]; }
+            TOK_CHAR            { $$ = sym[$1]; }
 
         |   TOK_BRACK_S TOK_SUB Integer TOK_BRACK_E {$$=-$3;}
 
@@ -51,9 +54,13 @@ E       :   Integer
         |   E TOK_MUL E         { $$ = $1 * $3; }
         |   E TOK_DIV E         { $$ = $1 / $3; }
 
+        |   TOK_NUM             {$$ = $1;}
+
+
+
 
 ;
-Integer :   TOK_NUM
+Integer :   TOK_NUM             {$$ = $1;}
 
 ;
 
@@ -62,7 +69,8 @@ Integer :   TOK_NUM
 
 void yyerror(char *s)
 {
-    fprintf(stderr, "%s\n", s);
+    extern int lc;
+    fprintf(stderr, "Parsing error : line %d\n", lc);
 }
 
 int main(void)
