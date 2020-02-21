@@ -25,13 +25,19 @@ Prog    :   TOK_MAIN TOK_CURLY_BRACK_S stmts TOK_CURLY_BRACK_E '\n'
 
         |   TOK_MAIN TOK_CURLY_BRACK_S '\n' stmts TOK_CURLY_BRACK_E '\n'
 
+        |   TOK_MAIN TOK_CURLY_BRACK_S '\n' stmts '\n' TOK_CURLY_BRACK_E '\n'
+
+        |   TOK_MAIN TOK_CURLY_BRACK_S stmts '\n' TOK_CURLY_BRACK_E '\n'
+
 ;
 stmts   :
-        |   stmt TOK_SEMICOLON stmts
+        |   stmt TOK_SEMICOLON '\n' stmts
+        |   stmt TOK_SEMICOLON  stmts
 
 ;
 
 stmt    :    E
+
 
         |    TOK_CHAR TOK_ASSIGN E             { sym[$1] = $3; }
 
