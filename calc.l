@@ -3,6 +3,8 @@
     #include <stdio.h>
     #include "calc.tab.h"
     void yyerror(char *);
+
+    int lc=1;
 %}
 
 
@@ -13,6 +15,7 @@ var   ([a-z]([a-z0-9]*))
 %%
 
 "print"     {return(TOK_PRINTLN);}
+
 
 {var}+      {
                 yylval = *yytext - 'a';
@@ -45,23 +48,30 @@ var   ([a-z]([a-z0-9]*))
 
 
 
-[()=]   { return *yytext;       }
+
+
 
 [" "]   ;
 
 
-"{"         { printf("Start of the file '{' ignored\n"); }
+"{"         { return(TOK_CURLY_BRACK_S);  }
 
-"}"         { printf("Start of the file '}' ignored\n"); }
+"}"         { return(TOK_CURLY_BRACK_E);  }
 
-"main()"    { printf("Start of the file 'main()' ignored\n");}
+"("         { return(TOK_BRACK_S);  }
 
-[ \n]   {  return *yytext; }
+")"         { return(TOK_BRACK_E);  }
+
+"="         { return(TOK_ASSIGN);  }
+
+"main()"    { return(TOK_MAIN);}
+
+[ \n]   {  lc++;return *yytext; }
 
 [ \t]   ;
 
 
-.       {   printf("Invalid character '%c', ignored\n", yytext[0]); }
+.       {   printf("Lexical error: -'%c'\n", yytext[0]); }
 
 %%
 
