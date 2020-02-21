@@ -1,0 +1,38 @@
+1. 
+    main() {x = 3;}
+    
+2. 
+    main() {x = 3; print x;}
+    
+3. 
+    main(){x=3; x=5+4;print x;}
+    
+4. 
+    main() {x = 3* 4; print x;}
+    
+5. 
+    main() {print 1 + 2 + 4;}
+    
+6. 
+    main() {x = 0; x = 1-2; }
+    
+7.
+    main() { 1x = 3;
+    }
+
+8. 
+    main() {
+    x = 3;
+    print x; }
+
+
+9. 
+    x = 0;
+10. 
+    main(){x=3; x+=5+4;printx;}
+
+11. 
+    main(){x=3; x=(-5)+3;printx;}
+
+12. 
+    main(){x=3; y=2;printx;printy;}
