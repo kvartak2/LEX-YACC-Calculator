@@ -16,6 +16,7 @@ var   ([a-z]([a-z0-9]*))
 
 "print"     {return(TOK_PRINTLN);}
 
+"; }"	{printf("Lexical error: -\n");}
 
 {var}+      {
                 yylval = *yytext - 'a';
